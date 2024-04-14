@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, {{ session['user'] }}!</h1>
+    <form action="{{ url_for('csv.upload_csv') }}" method="post" enctype="multipart/form-data">
+        <label for="file">Upload CSV:</label>
+        <input type="file" id="file" name="file">
+        <button type="submit">Upload</button>
+    </form>
+
+    <h2><a href="{{ url_for('csv.movies') }}">View Movies</a></h2>
+    <h2><a href="{{ url_for('csv.view_uploads') }}">View Uploaded files</a></h2>
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
+
+</body>
+</html>

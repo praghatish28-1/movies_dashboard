@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies List</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #dddddd; text-align: left; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        .pagination { display: flex; justify-content: center; list-style: none; padding: 20px; }
+        .pagination li { padding: 10px; background-color: #f0f0f0; margin-right: 5px; }
+        select { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Movies List</h1>
+    <!-- Sorting form -->
+    <form action="{{ url_for('csv.movies') }}" method="get">
+        <label for="sort_by">Sort by:</label>
+        <select name="sort_by" id="sort_by" onchange="this.form.submit()">
+            <option value="date_added" {% if sort_by == 'date_added' %} selected {% endif %}>Date Added</option>
+            <option value="release_date" {% if sort_by == 'release_date' %} selected {% endif %}>Release Date</option>
+            <option value="duration" {% if sort_by == 'duration' %} selected {% endif %}>Duration</option>
+        </select>
+        <select name="sort_order" id="sort_order" onchange="this.form.submit()">
+            <option value="asc" {% if sort_order == 'asc' %} selected {% endif %}>Ascending</option>
+            <option value="desc" {% if sort_order == 'desc' %} selected {% endif %}>Descending</option>
+        </select>
+    </form>
+    <table>
+        <tr>
+            <!-- Headers here -->
+            <th>Show ID</th><th>Type</th><th>Title</th><th>Director</th><th>Cast</th>
+            <th>Country</th><th>Date Added</th><th>Release Year</th><th>Rating</th>
+            <th>Duration</th><th>Listed In</th><th>Description</th>
+        </tr>
+        {% for movie in movies %}
+        <tr>
+            <!-- Movie data here -->
+            <td>{{ movie.show_id }}</td><td>{{ movie.type }}</td><td>{{ movie.title }}</td>
+            <td>{{ movie.director }}</td><td>{{ movie.cast }}</td><td>{{ movie.country }}</td>
+            <td>{{ movie.date_added }}</td><td>{{ movie.release_year }}</td><td>{{ movie.rating }}</td>
+            <td>{{ movie.duration }}</td><td>{{ movie.listed_in }}</td><td>{{ movie.description }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <!-- Pagination links -->
+    <ul class="pagination">
+        {% if page > 1 %}
+        <li><a href="{{ url_for('csv.movies', page=page-1, sort_by=sort_by, sort_order=sort_order) }}">Previous</a></li>
+        {% endif %}
+        {% if page < total_pages %}
+        <li><a href="{{ url_for('csv.movies', page=page+1, sort_by=sort_by, sort_order=sort_order) }}">Next</a></li>
+        {% endif %}
+    </ul>
+    <a href="{{ url_for('auth.dashboard') }}">Back to Dashboard</a>
+</body>
+</html>
